@@ -1,4 +1,5 @@
-import { Box, Grid, Image, Text, VStack, Button } from "@chakra-ui/react";
+import { useState } from "react";
+import { Box, Grid, Image, Text, VStack, Button, Input } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
 const sampleProducts = [
@@ -8,10 +9,22 @@ const sampleProducts = [
 ];
 
 const ProductList = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredProducts = sampleProducts.filter((product) =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <Box p={4}>
+      <Input
+        placeholder="Search for products..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        mb={4}
+      />
       <Grid templateColumns="repeat(auto-fill, minmax(200px, 1fr))" gap={6}>
-        {sampleProducts.map((product) => (
+        {filteredProducts.map((product) => (
           <Box key={product.id} borderWidth="1px" borderRadius="lg" overflow="hidden">
             <Image src={product.image} alt={product.name} />
             <VStack p={4}>
