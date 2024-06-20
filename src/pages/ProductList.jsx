@@ -1,19 +1,23 @@
 import { useState } from "react";
-import { Box, Grid, Image, Text, VStack, Button, Input } from "@chakra-ui/react";
+import { Box, Grid, Image, Text, VStack, Button, Input, Select } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
 const sampleProducts = [
-  { id: 1, name: "Smartphone", price: "$299", image: "https://via.placeholder.com/150" },
-  { id: 2, name: "Laptop", price: "$799", image: "https://via.placeholder.com/150" },
-  { id: 3, name: "Headphones", price: "$199", image: "https://via.placeholder.com/150" },
+  { id: 1, name: "Smartphone", price: "$299", category: "Electronics", image: "https://via.placeholder.com/150" },
+  { id: 2, name: "Laptop", price: "$799", category: "Electronics", image: "https://via.placeholder.com/150" },
+  { id: 3, name: "Headphones", price: "$199", category: "Accessories", image: "https://via.placeholder.com/150" },
 ];
 
 const ProductList = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
-  const filteredProducts = sampleProducts.filter((product) =>
-    product.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredProducts = sampleProducts.filter((product) => {
+    return (
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (selectedCategory === "" || product.category === selectedCategory)
+    );
+  });
 
   return (
     <Box p={4}>
@@ -23,6 +27,15 @@ const ProductList = () => {
         onChange={(e) => setSearchQuery(e.target.value)}
         mb={4}
       />
+      <Select
+        placeholder="Filter by category"
+        value={selectedCategory}
+        onChange={(e) => setSelectedCategory(e.target.value)}
+        mb={4}
+      >
+        <option value="Electronics">Electronics</option>
+        <option value="Accessories">Accessories</option>
+      </Select>
       <Grid templateColumns="repeat(auto-fill, minmax(200px, 1fr))" gap={6}>
         {filteredProducts.map((product) => (
           <Box key={product.id} borderWidth="1px" borderRadius="lg" overflow="hidden">
